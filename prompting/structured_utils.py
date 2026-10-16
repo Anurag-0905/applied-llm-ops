@@ -27,7 +27,7 @@ SUPPORT_DIR = Path("prompts") / "support_classifier"
 SYSTEM_FILE, USER_FILE = "system.md", "user.j2"
 REPORT_PATH = Path("experiments") / "s16_heldout.md"
 EXAMPLES_PER_LABEL = 2
-S16_CACHE = Path.home() / ".genai_course" / "s16_cache.json"     # answers are remembered here, so a re-run is free
+S16_CACHE = Path.home() / "Desktop" / "FSDS" / "gen_ai" / "applied-llm-ops" / "s16_cache.json"     # answers are remembered here, so a re-run is free
 
 
 # ---------------------------------------------------------------- templates: variables, loops, and a loud failure
@@ -302,7 +302,7 @@ def render_check(system_text: str, user_template: str, tickets=SAMPLE5) -> list:
     return [(t, build_messages(system_text, user_template, t, examples)) for t in tickets]
 
 
-def check_s16_work(repo_path, need: int = 16, n: int = 20) -> list:
+def check_s16_work(repo_path, need: int = 16, n: int = 25) -> list:
     """Plain-English checks on your work repository for Session 16. Each failure carries the fix."""
     repo = Path(repo_path)
     out = []

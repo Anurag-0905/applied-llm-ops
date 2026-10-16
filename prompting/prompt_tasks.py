@@ -369,9 +369,9 @@ TASK6 = Task(
 TASKS = [TASK1, TASK2, TASK3, TASK4, TASK5, TASK6]
 
 # ---------------------------------------------------------------- zero / one / few-shot: teaching a house convention
-LABELS = ["card", "loan", "account", "other"]
+LABELS = ["card", "loan", "account", "upi", "other"]
 
-CLASSIFY_INSTRUCTION = ("Classify the bank customer's message into exactly one category: card, loan, account or other. "
+CLASSIFY_INSTRUCTION = ("Classify the bank customer's message into exactly one category: card, loan, account, upi or other. "
                         "Reply with that single word only.")
 
 EXAMPLES = [   # kept apart from the test set; each one teaches part of the bank's convention
@@ -379,6 +379,7 @@ EXAMPLES = [   # kept apart from the test set; each one teaches part of the bank
     ("I lost my debit card on the train.", "card"),
     ("Please send me a no-dues certificate for my closed home loan.", "loan"),
     ("How do I change my registered mobile number?", "other"),
+    ("I tried to pay via UPI but the QR code did not scan.", "upi"),
 ]
 
 COMPLAINTS_TEST = [   # (message, label under the bank's convention)
@@ -390,6 +391,7 @@ COMPLAINTS_TEST = [   # (message, label under the bank's convention)
     ("The interest rate on my education loan has gone up without any notice.", "loan"),
     ("Please update the nominee details on my savings account.", "other"),
     ("My account statement for September shows a balance that does not match my records.", "account"),
+    ("My UPI transfer has been stuck on 'Pending' for two days.", "upi"),
 ]
 
 
