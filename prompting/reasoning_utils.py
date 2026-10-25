@@ -112,7 +112,7 @@ def majority_vote(keys: list) -> tuple:
 
 
 # ---------------------------------------------------------------- an on-disk memory of answers, and a meter
-DEFAULT_CACHE = Path.home()  /"Desktop"/"FSDS"/"genaicourse"/"genai-agents-course"
+DEFAULT_CACHE = Path.home()  /"Desktop"/"FSDS"/"gen_ai"/"applied-llm-ops"
 
 
 class DiskCache:

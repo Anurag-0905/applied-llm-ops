@@ -1,6 +1,6 @@
 # Pre-read for Session 14 — ten minutes
 
-**The model is the same. The words change everything.** Sessions 9–13 were about the model: what it sees, which one to pick, where it runs. Module 2 is about what you say to it. A model given "Write a reminder." has to guess the audience, the length, the facts and the tone. A model given a good prompt does not guess. That is the cheapest improvement in AI engineering: it costs nothing, takes minutes, and should always be tried before anything expensive.
+**The model is the same. The words change everything.** Sessions 9–13 were about the model: what it sees, which one to pick, where it runs. Prompting is about what you say to it. A model given "Write a reminder." has to guess the audience, the length, the facts and the tone. A model given a good prompt does not guess. That is the cheapest improvement in AI engineering: it costs nothing, takes minutes, and should always be tried before anything expensive.
 
 **A prompt has parts.** Five you should always think about, plus one optional:
 - **Role** — who the model is and who it is writing for. It sets vocabulary and level.
@@ -18,7 +18,7 @@ In a chat request, the standing rules (role, constraints, format) usually go in 
 
 **A prompt is an asset.** Someone will edit your prompt next month and not know why it says what it says. So keep each version, the output it produced, and the checks it passed, in a file under version control. Never edit an old entry; add a new one. That file is your **prompt library**, and it is what you will hand in today.
 
-**Your own repository.** Today you also create your own GitHub repository and push to it for the first time. Two folders, two jobs: the course repository is where you *pull* from; your work repository is where you *push* to. Read `module02/work_repo_steps.md` before class.
+**Your own repository.** Today you also create your own GitHub repository and push to it for the first time. Two folders, two jobs: the course repository is where you *pull* from; your work repository is where you *push* to. Read `prompting/work_repo_steps.md` before class.
 
 **Three questions to arrive with**
 - A model answers a customer message with three paragraphs and an emoji. Which two parts of the prompt would you add first?

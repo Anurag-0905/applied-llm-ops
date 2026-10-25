@@ -1,6 +1,6 @@
 """Instructor tool: which students have pushed a prompt library with three different tasks?
 
-    uv run python module02/check_submissions.py submissions.txt
+    uv run python prompting/check_submissions.py submissions.txt
 
 submissions.txt: one GitHub repository URL per line, or a CSV exported from your form (the first cell on each
 line containing 'github.com' is used). Repositories must be PUBLIC. It reads prompts/library.md straight from

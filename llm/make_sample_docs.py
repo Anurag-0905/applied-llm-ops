@@ -1,5 +1,5 @@
 """Instructor: regenerate the three SYNTHETIC KYC-style sample documents.
-    uv run python module01/make_sample_docs.py
+    uv run python llm/make_sample_docs.py
 Everything here is invented: fictional people, fake numbers, a big SAMPLE watermark.
 These are teaching images, not copies of any real identity document."""
 from __future__ import annotations

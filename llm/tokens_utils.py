@@ -92,7 +92,7 @@ def load_points(words: list[str] = WORDS) -> tuple[np.ndarray, str]:
             return pca_2d(vecs), "cache:embeddings_10words.json"
         raise RuntimeError(
             "No embedding source. Either run `ollama pull nomic-embed-text` and start Ollama, "
-            "or ask the instructor for module01/embeddings_10words.json."
+            "or ask the instructor for llm/embeddings_10words.json."
         )
 
 
