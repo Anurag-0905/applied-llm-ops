@@ -1,4 +1,4 @@
-# Session 15 - loan eligibility, ten cases (2026-10-15)
+# loan eligibility, ten cases
 
 Model: `openai/gpt-oss-20b`. Strategies: plain, cot, stepback, vote x5. A cell shows the answer, and ok or WRONG against the answer key.
 

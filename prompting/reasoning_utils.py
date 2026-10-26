@@ -505,8 +505,8 @@ def accuracy_markdown(results: dict, problems: list, strategies: tuple, model: s
 
 
 def save_accuracy_table(repo_path, text: str) -> Path:
-    """Write the table to experiments/s15_accuracy_table.md in your work repo. Git keeps the history of earlier runs."""
-    target = Path(repo_path) / "experiments" / "s15_accuracy_table.md"
+    """Write the table to experiments/reasoning_accuracy_table.md in your work repo. Git keeps the history of earlier runs."""
+    target = Path(repo_path) / "experiments" / "reasoning_accuracy_table.md"
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(text, encoding="utf-8")
     return target
@@ -618,14 +618,14 @@ def check_library_v2(repo_path, need: int = 2) -> list:
 
 def check_accuracy_table(repo_path, cases: int = 10) -> list:
     """Plain-English check that the accuracy table for the ten cases is in your work repo."""
-    table = Path(repo_path) / "experiments" / "s15_accuracy_table.md"
+    table = Path(repo_path) / "experiments" / "reasoning_accuracy_table.md"
     if not table.exists():
-        return [CheckResult("experiments/s15_accuracy_table.md exists", False, "set SAVE_V2 = True in section 11 and run that cell once")]
+        return [CheckResult("experiments/reasoning_accuracy_table.md exists", False, "set SAVE_V2 = True in section 11 and run that cell once")]
     rows = [ln for ln in table.read_text(encoding="utf-8", errors="replace").splitlines() if re.match(r"^\| L\d\d-", ln)]
-    return [CheckResult("experiments/s15_accuracy_table.md exists", True),
+    return [CheckResult("experiments/reasoning_accuracy_table.md exists", True),
             CheckResult(f"the table has all {cases} loan cases", len(rows) >= cases, f"found {len(rows)} case rows")]
 
 
-def check_s15_work(repo_path) -> list:
+def check_reasoning_work(repo_path) -> list:
     """Everything Session 15 asks you to commit: library v2 entries, v1 history kept, and the ten-case accuracy table."""
     return check_library_v2(repo_path) + check_accuracy_table(repo_path)

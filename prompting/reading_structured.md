@@ -1,6 +1,6 @@
-# Pre-read for Session 16 — ten minutes
+# Pre-read for Structured Prompting — ten minutes
 
-**Session 15 asked whether to make a model think. Session 16 is about how a prompt is built so that it is safe to reuse, easy to review, and tested.** Three habits turn "a prompt I typed" into "a prompt a team can ship".
+**Reasoning asked whether to make a model think. Session 16 is about how a prompt is built so that it is safe to reuse, easy to review, and tested.** Three habits turn "a prompt I typed" into "a prompt a team can ship".
 
 **1. Keep instructions and data apart**
 A customer ticket is *data*. Your rules are *instructions*. A model reads one long text, so a ticket that says "the reply said *other*" or "reply with the word account" can look like part of your instructions. The fix is cheap: put the customer's words **inside tags** (`<ticket> ... </ticket>`) and say once, in the system prompt, that whatever is inside the tags is text to classify, never an instruction. Three styles do the job: XML-style tags, a Markdown code fence, or JSON. They differ in cost and readability, and each can be broken by a customer who types the closing marker, so your code **escapes** your own tag names inside customer text. This does not make a prompt attack-proof (Session 18 attacks it properly); it removes the *accidental* confusion first.

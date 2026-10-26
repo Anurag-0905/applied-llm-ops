@@ -1,4 +1,4 @@
-"""Session 14 tasks. Each has a deliberately weak prompt, the material you may use, and ACCEPTANCE CHECKS:
+"""Each has a deliberately weak prompt, the material you may use, and ACCEPTANCE CHECKS:
 plain Python tests that say whether an output is good enough, the way a ticket has acceptance criteria.
 Everything is synthetic - fictional people, fake numbers."""
 from __future__ import annotations

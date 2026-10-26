@@ -1,4 +1,4 @@
-"""Session 16 data - the customer-support classifier, as a labelled set that is split once and never mixed again.
+"""data - the customer-support classifier, as a labelled set that is split once and never mixed again.
 
 Every ticket is invented. The labels follow the bank's house rules (see GUIDE), the same convention as Session 14:
 UPI problems are `account`, and a request to change personal details is `other` even when it mentions a card or a loan.
@@ -184,6 +184,6 @@ You classify customer-support tickets. Reply with one word.
 STARTER_USER = """{{ ticket }}
 """
 
-# the S14 baseline: one line of instruction, no tags, no examples, no rules
+# the baseline: one line of instruction, no tags, no examples, no rules
 BASELINE_INSTRUCTION = ("Classify the bank customer's message into exactly one category: card, loan, account or other. "
                         "Reply with that single word only.")

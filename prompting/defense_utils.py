@@ -25,9 +25,8 @@ from prompt_utils import CheckResult
 from structured_tasks import HELDOUT
 from structured_utils import build_messages, pick_examples
 
-REPORT_PATH = Path("experiments") / "s18_defense.md"
-S18_CACHE = Path.home() / ".genai_course" / "s18_cache.json"
-
+REPORT_PATH = Path("experiments") / "defense.md"
+DEFENCE_CACHE = Path.home() / "Desktop" / "FSDS" / "gen_ai" / "applied-llm-ops" / "defense_cache.json"
 _SCRATCH_RE = re.compile(r"<scratchpad>(.*?)</scratchpad>", re.IGNORECASE | re.DOTALL)
 _FINAL_RE = re.compile(r"<final>(.*?)</final>", re.IGNORECASE | re.DOTALL)
 
@@ -181,7 +180,7 @@ def parse_clean_line(text: str):
 
 
 # ---------------------------------------------------------------- is my work complete? (offline: no model call)
-def check_s18_work(repo_path, min_clean_accuracy: float = 0.7) -> list:
+def check_defense_work(repo_path, min_clean_accuracy: float = 0.7) -> list:
     """Plain-English checks on your work repository for Session 18. Each failure carries the fix."""
     repo = Path(repo_path)
 

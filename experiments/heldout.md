@@ -1,6 +1,6 @@
 # Session 16: held-out results for the support classifier
 
-Model: `openai/gpt-oss-20b` · Date: 2026-10-22 · system.md `40170083` · user.j2 `2782cade` · examples per label: 2
+Model: `openai/gpt-oss-20b` · Date: 2026-10-26 · system.md `bd516298` · user.j2 `2782cade` · examples per label: 2
 
 Held-out accuracy (structured): 25/25 = 100%
 Baseline accuracy (one-line instruction): 16/25 = 64%

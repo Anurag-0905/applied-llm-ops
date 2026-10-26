@@ -1,8 +1,8 @@
-# Session 17: prompt evaluation - v1 baseline vs v2 structured
+# Evaluation: prompt evaluation - v1 baseline vs v2 structured
 
-Answering model: `openai/gpt-oss-20b` · Judge model: `openai/gpt-oss-20b` · Date: 2026-10-25
+Answering model: `openai/gpt-oss-20b` · Judge model: `openai/gpt-oss-20b` · Date: 2026-10-26
 
-| Criterion | v1 (S14 baseline) | v2 (S16 structured) |
+| Criterion | v1 (baseline) | v2 (structured) |
 |---|---|---|
 | Correct label | 16/25 = 64% | 25/25 = 100% |
 | Cites the right house rule | 15/25 = 60% | 21/25 = 84% |

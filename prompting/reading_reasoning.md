@@ -1,6 +1,6 @@
-# Pre-read for Session 15 — ten minutes
+# Pre-read for Reasoning — ten minutes
 
-**Session 14 was about what you say. Session 15 is about whether to ask the model to think.** Thinking is not free: every word a model writes before its answer is billed, takes time, and can be wrong. So the question is never "does thinking help?" It is "does it help *this* kind of question, by enough to pay for?"
+**Prompt Anatomy was about what you say. Reasoning is about whether to ask the model to think.** Thinking is not free: every word a model writes before its answer is billed, takes time, and can be wrong. So the question is never "does thinking help?" It is "does it help *this* kind of question, by enough to pay for?"
 
 **Four ways to ask the same question**
 - **Plain** — "Reply with only the final answer." One call, the cheapest.

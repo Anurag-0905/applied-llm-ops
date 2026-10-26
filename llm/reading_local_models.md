@@ -1,4 +1,4 @@
-# Pre-read for Session 12 — ten minutes
+# Pre-read for Local Models — ten minutes
 
 **Before class:** pull a second local model so the lab has something to compare against `llama3.2:3b`:
 ```powershell

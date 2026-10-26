@@ -1,4 +1,4 @@
-# Pre-read for Session 10 — ten minutes
+# Pre-read for Model Matrix — ten minutes
 
 **The question.** Yesterday you learned what a model sees. Today: *which* model goes in the box? There are hundreds. The skill is not knowing them all — it is having a method that works when a new one appears next month.
 
@@ -18,12 +18,12 @@
 - **Quality.** The one you cannot read off a page. Leaderboards help you shortlist; only your own test on your own task decides.
 
 ## The constraint nobody can negotiate: data residency
-Some data may not leave your building, or your country, however good and cheap the model is — customer identity documents, payment data, health records. Rules and contracts decide, not engineers. So residency is a **hard constraint**: it *removes* options before you compare anything else. Regulations differ by country and sector; in class we treat it as "ask compliance", and Session 57 returns to it.
+Some data may not leave your building, or your country, however good and cheap the model is — customer identity documents, payment data, health records. Rules and contracts decide, not engineers. So residency is a **hard constraint**: it *removes* options before you compare anything else. Regulations differ by country and sector.
 
 ## The method we will use (and reuse all course)
 1. **Eliminate** with hard constraints (data must stay in-house; must answer in 3 seconds; must fit the context; must handle the volume).
 2. **Score** the survivors on cost, speed and quality with weights the *business* chooses.
-3. **Verify** the winner on your own examples. (Session 17 gives you the tools; today you do a tiny version.)
+3. **Verify** the winner on your own examples. (Evaluation gives you the tools; today you do a tiny version.)
 
 ## Three questions to arrive with
 - A bank wants a chatbot for public product questions *and* a system that reads customers' salary slips. Should they use the same model? Why or why not?

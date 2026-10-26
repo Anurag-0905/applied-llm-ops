@@ -1,6 +1,6 @@
-# Pre-read for Session 14 — ten minutes
+# Pre-read for Prompt Anatomy — ten minutes
 
-**The model is the same. The words change everything.** Sessions 9–13 were about the model: what it sees, which one to pick, where it runs. Prompting is about what you say to it. A model given "Write a reminder." has to guess the audience, the length, the facts and the tone. A model given a good prompt does not guess. That is the cheapest improvement in AI engineering: it costs nothing, takes minutes, and should always be tried before anything expensive.
+**The model is the same. The words change everything.** Previous Notebooks were about the model: what it sees, which one to pick, where it runs. Prompting is about what you say to it. A model given "Write a reminder." has to guess the audience, the length, the facts and the tone. A model given a good prompt does not guess. That is the cheapest improvement in AI engineering: it costs nothing, takes minutes, and should always be tried before anything expensive.
 
 **A prompt has parts.** Five you should always think about, plus one optional:
 - **Role** — who the model is and who it is writing for. It sets vocabulary and level.

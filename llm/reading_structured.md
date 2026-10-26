@@ -1,6 +1,6 @@
-# Pre-read for Session 13 — ten minutes
+# Pre-read for Vision Structured — ten minutes
 
-**An image is just more content in the message.** A normal message has `content` as a string. For vision, `content` becomes a *list*: one text part, one image part. The image part carries the picture as a long string of letters and digits (base64) or a link. The model receives it and "reads" it, and you pay for it in tokens — often hundreds or more per image, depending on the model and the image size, which changes the cost arithmetic from Session 10.
+**An image is just more content in the message.** A normal message has `content` as a string. For vision, `content` becomes a *list*: one text part, one image part. The image part carries the picture as a long string of letters and digits (base64) or a link. The model receives it and "reads" it, and you pay for it in tokens — often hundreds or more per image, depending on the model and the image size, which changes the cost arithmetic from Model Matrix.
 
 **A vision model and a text model can be different models.** Today's pipeline uses one to read the picture (turning it into text) and another to turn that text into a clean record. Splitting the job lets you use the cheapest model that is good enough at each step.
 

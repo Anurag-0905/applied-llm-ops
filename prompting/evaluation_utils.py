@@ -1,9 +1,9 @@
-"""Session 17 helpers - evaluation: a judge call, a parsed verdict, a pass-rate comparison, and a human spot-check.
+"""Evaluation helpers - evaluation: a judge call, a parsed verdict, a pass-rate comparison, and a human spot-check.
 
 Five ideas live here:
   1. The judge call: one model call per answer, grading all four rubric criteria at once, strict JSON out.
   2. A parsed verdict: four fixed keys, two allowed values, nothing else - never a free-text "mostly fine, I think".
-  3. Two prompts, the same golden set, the same judge: v1 is Session 14's baseline, v2 is YOUR Session 16 files.
+  3. Two prompts, the same golden set, the same judge: v1 is the baseline, v2 is YOUR structured prompt files.
   4. An order guard: for every ticket, which prompt is judged first is shuffled, so no timing or caching quirk
      favours one prompt over the other.
   5. A human spot-check: you grade a handful of tickets yourself and compare with the judge, so the judge's
@@ -22,15 +22,15 @@ from pathlib import Path
 
 import jinja2
 
-from evaluation_tasks import DEFAULT_FORMAT_RULE, GOLDEN20, GUIDE, JUDGE_SYSTEM, JUDGE_USER, RUBRIC, RUBRIC_IDS, V1_INSTRUCTION
+from evaluation_tasks import DEFAULT_FORMAT_RULE, GOLDEN25, GUIDE, JUDGE_SYSTEM, JUDGE_USER, RUBRIC, RUBRIC_IDS, V1_INSTRUCTION
 from prompt_utils import CheckResult
 from structured_utils import PromptFileError, SUPPORT_DIR, SYSTEM_FILE, USER_FILE, load_prompt_file, pick_examples, structured_maker
 
-REPORT_PATH = Path("experiments") / "s17_eval.md"
-S17_CACHE = Path.home() / "Desktop" / "FSDS" / "gen_ai" / "applied-llm-ops" / "s17_cache.json"
+REPORT_PATH = Path("experiments") / "eval.md"
+EVAL_CACHE = Path.home() / "Desktop" / "FSDS" / "gen_ai" / "applied-llm-ops" / "eval_cache.json"
 
 
-# ---------------------------------------------------------------- templates: the same strict-undefined engine as Session 16
+# ---------------------------------------------------------------- templates: the same strict-undefined engine as Structured Prompting, so the same errors if you forget a variable
 def make_env() -> jinja2.Environment:
     return jinja2.Environment(undefined=jinja2.StrictUndefined, trim_blocks=True, lstrip_blocks=True,
                               keep_trailing_newline=False, autoescape=False)
@@ -50,12 +50,12 @@ def escape_judge_tags(text: str) -> str:
 
 # ---------------------------------------------------------------- v1 and v2: two ways to answer the same ticket
 def v1_messages(ticket: str) -> list:
-    """Session 14's baseline: one line of instruction, the ticket pasted in, nothing else."""
+    """The baseline: one line of instruction, the ticket pasted in, nothing else."""
     return [{"role": "system", "content": V1_INSTRUCTION}, {"role": "user", "content": ticket}]
 
 
 def v2_messages_from_files(repo_path, ticket: str, k_per_label: int = 2) -> list:
-    """Session 16's structured prompt, loaded from the student's OWN work repository right now."""
+    """The structured prompt, loaded from the student's OWN work repository right now."""
     folder = Path(repo_path) / SUPPORT_DIR
     system = load_prompt_file(folder / SYSTEM_FILE)
     template = load_prompt_file(folder / USER_FILE)
@@ -131,7 +131,7 @@ def shuffle_order(items, seed: int = 0) -> list:
 
 
 # ---------------------------------------------------------------- scoring one prompt version over the golden set
-def score_prompt(answer_lab, judge_lab, make_answer_messages, items=GOLDEN20, *, rubric=RUBRIC, guide: str = GUIDE,
+def score_prompt(answer_lab, judge_lab, make_answer_messages, items=GOLDEN25, *, rubric=RUBRIC, guide: str = GUIDE,
                  format_rule: str = DEFAULT_FORMAT_RULE, max_answer_tokens: int = 400) -> dict:
     """Answer every ticket with ONE prompt version, then judge every answer against the rubric."""
     rows = []
@@ -152,7 +152,7 @@ def pass_rates(rows: list, rubric=RUBRIC) -> dict:
             "all_pass": sum(1 for r in graded if r["all_pass"])}
 
 
-def compare_prompts(answer_lab, judge_lab, v1_maker, v2_maker, items=GOLDEN20, *, rubric=RUBRIC, guide: str = GUIDE,
+def compare_prompts(answer_lab, judge_lab, v1_maker, v2_maker, items=GOLDEN25, *, rubric=RUBRIC, guide: str = GUIDE,
                     format_rule: str = DEFAULT_FORMAT_RULE, seed: int = 0, max_answer_tokens: int = 400) -> dict:
     """v1 and v2, the same twenty tickets, the same judge. The order the two are answered in is shuffled per
     ticket (shuffle_order); the result is the same pass rates either way - this guards against, not relies on, order."""
@@ -176,7 +176,7 @@ def pct(n: int, total: int) -> str:
 
 
 # ---------------------------------------------------------------- the human spot-check
-def spot_check_items(items=GOLDEN20, k: int = 5, seed: int = 0) -> list:
+def spot_check_items(items=GOLDEN25, k: int = 5, seed: int = 0) -> list:
     """k tickets chosen the same deterministic way as pick_examples: same every run, no hidden randomness."""
     ranked = sorted(items, key=lambda it: hashlib.sha256(f"{seed}|{it[0]}".encode("utf-8")).hexdigest())
     return ranked[:k]
@@ -204,9 +204,9 @@ def agreement_rate(pairs: list) -> dict:
 def eval_markdown(v1: dict, v2: dict, model: str, judge_model: str, *, rubric=RUBRIC, spot_check: dict = None,
                   today: str = None) -> str:
     today = today or datetime.date.today().isoformat()
-    lines = ["# Session 17: prompt evaluation - v1 baseline vs v2 structured", "",
+    lines = ["# Evaluation: prompt evaluation - v1 baseline vs v2 structured", "",
              f"Answering model: `{model}` · Judge model: `{judge_model}` · Date: {today}", "",
-             "| Criterion | v1 (S14 baseline) | v2 (S16 structured) |", "|---|---|---|"]
+             "| Criterion | v1 (baseline) | v2 (structured) |", "|---|---|---|"]
     for c in rubric:
         lines.append(f"| {c['name']} | {pct(v1['per_criterion'][c['id']], v1['n'])} | {pct(v2['per_criterion'][c['id']], v2['n'])} |")
     lines.append(f"| **All four criteria** | **{pct(v1['all_pass'], v1['n'])}** | **{pct(v2['all_pass'], v2['n'])}** |")
@@ -249,8 +249,8 @@ def parse_spot_check(text: str):
 
 
 # ---------------------------------------------------------------- is my work complete? (offline: no model call)
-def check_s17_work(repo_path, min_spot_check: int = 5) -> list:
-    """Plain-English checks on your work repository for Session 17. Each failure carries the fix."""
+def check_eval_work(repo_path, min_spot_check: int = 5) -> list:
+    """Plain-English checks on your work repository for evaluation. Each failure carries the fix."""
     repo = Path(repo_path)
 
     def ck(name, ok, fix="", info=""):
@@ -262,10 +262,10 @@ def check_s17_work(repo_path, min_spot_check: int = 5) -> list:
     try:
         load_prompt_file(repo / SUPPORT_DIR / SYSTEM_FILE)
         load_prompt_file(repo / SUPPORT_DIR / USER_FILE)
-        out.append(ck("Session 16 prompt files are still there (system.md, user.j2)", True))
+        out.append(ck("Structureded prompt files are still there (system.md, user.j2)", True))
     except PromptFileError as e:
-        out.append(ck("Session 16 prompt files are still there (system.md, user.j2)", False,
-                      f"{e} Session 17 grades v2 from these same files - do not delete or move them."))
+        out.append(ck("Structured prompt files are still there (system.md, user.j2)", False,
+                      f"{e} evaluation grades v2 from these same files - do not delete or move them."))
 
     report_file = repo / REPORT_PATH
     if not report_file.exists():
@@ -280,8 +280,8 @@ def check_s17_work(repo_path, min_spot_check: int = 5) -> list:
         return out
     v1_pass, v1_n, v2_pass, v2_n = parsed
     out.append(ck("report states pass rates for both prompts", True))
-    out.append(ck("report covers all twenty tickets for both prompts", v1_n == v2_n == len(GOLDEN20),
-                  f"v1 counted {v1_n}, v2 counted {v2_n}, golden set is {len(GOLDEN20)}"))
+    out.append(ck("report covers all twenty tickets for both prompts", v1_n == v2_n == len(GOLDEN25),
+                  f"v1 counted {v1_n}, v2 counted {v2_n}, golden set is {len(GOLDEN25)}"))
     spot = parse_spot_check(text)
     if spot is None:
         out.append(ck(f"human spot-check of at least {min_spot_check} tickets is recorded", False,

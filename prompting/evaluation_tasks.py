@@ -1,16 +1,16 @@
-"""Session 17 data - prompt evaluation: the held-out tickets become a GOLDEN SET, four pass/fail checks become a RUBRIC.
+"""Evaluation data - prompt evaluation: the held-out tickets become a GOLDEN SET, four pass/fail checks become a RUBRIC.
 
-GOLDEN25 is not new data. It is exactly Session 16's HELDOUT split: twenty-five tickets, five per label, that neither
-the Session 14 baseline instruction nor the Session 16 structured prompt has ever seen as a worked example. Today
+GOLDEN25 is not new data. It is exactly Structured Prompting's HELDOUT split: twenty-five tickets, five per label, that neither
+the baseline instruction nor the structured prompt has ever seen as a worked example. Today
 those same twenty-five tickets stop being "the test" and become a golden set: a fixed, versioned list of items, each
 with its own rubric, that a second model (the judge) will grade without ever being told the "right" reply.
 
 RUBRIC is four pass/fail criteria, written down and agreed BEFORE a single answer is read - the same discipline
-as Session 16's leak guard (never pick examples that are also in the measuring set). A criterion is reworded
+as Structured Prompting's leak guard (never pick examples that are also in the measuring set). A criterion is reworded
 later only in a new version with a new number; it is never loosened to let a particular answer pass.
 
-V1 is Session 14's baseline: a one-line instruction, no tags, no examples, no written rules. V2 is whatever is
-in the student's OWN work repository today (prompts/support_classifier/system.md and user.j2, from Session 16) -
+V1 is baseline: a one-line instruction, no tags, no examples, no written rules. V2 is whatever is
+in the student's OWN work repository today (prompts/support_classifier/system.md and user.j2, from Structured Prompting) -
 it is loaded at runtime in evaluation_utils.py, never duplicated here, so grading always uses the student's
 real, current file."""
 from __future__ import annotations
@@ -18,9 +18,9 @@ from __future__ import annotations
 from structured_tasks import BASELINE_INSTRUCTION, GUIDE, HELDOUT, LABELS, REFERENCE_SYSTEM, REFERENCE_USER
 
 # ---------------------------------------------------------------- the golden set: reused, not rebuilt
-GOLDEN25 = HELDOUT          # same 25 tickets, same order, same labels as Session 16's held-out split
+GOLDEN25 = HELDOUT          # same 25 tickets, same order, same labels as Structured Prompting's held-out split
 
-V1_INSTRUCTION = BASELINE_INSTRUCTION      # Session 14's one-line classifier instruction, unchanged
+V1_INSTRUCTION = BASELINE_INSTRUCTION      # one-line classifier instruction, unchanged
 
 # ---------------------------------------------------------------- the rubric: four pass/fail criteria, decided first
 RUBRIC = [
@@ -81,5 +81,5 @@ SAMPLE_REPLY_B = ("Sorry for the trouble with your card. Per our 24-hour cooling
                   "reversible if you report within a day. I've flagged this as card.")
 
 # ---------------------------------------------------------------- re-exported so the notebook has one import line
-__all__ = ["GOLDEN20", "V1_INSTRUCTION", "RUBRIC", "RUBRIC_IDS", "JUDGE_SYSTEM", "JUDGE_USER", "DEFAULT_FORMAT_RULE",
+__all__ = ["GOLDEN25", "V1_INSTRUCTION", "RUBRIC", "RUBRIC_IDS", "JUDGE_SYSTEM", "JUDGE_USER", "DEFAULT_FORMAT_RULE",
           "SAMPLE_TICKET", "SAMPLE_REPLY_A", "SAMPLE_REPLY_B", "GUIDE", "LABELS", "REFERENCE_SYSTEM", "REFERENCE_USER"]

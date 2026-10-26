@@ -1,8 +1,8 @@
-"""Session 15 problems. Each one needs several steps of arithmetic or rule-following, has ONE correct answer that
+""" Each one needs several steps of arithmetic or rule-following, has ONE correct answer that
 Python can check, and hides a trap that a rushed answer falls into. Everything is synthetic: fictional people, fake
 numbers. The healthcare problem is a teaching exercise with an invented formulary, not medical advice.
 
-The correct answers are computed here from the same rules the problem text states, and tests/test_s15.py checks
+The correct answers are computed here from the same rules the problem text states, and tests/test_reaso.py checks
 them again against hand-worked numbers, so a wrong "truth" cannot hide in this file."""
 from __future__ import annotations
 
