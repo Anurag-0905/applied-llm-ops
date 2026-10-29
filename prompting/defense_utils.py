@@ -1,4 +1,4 @@
-"""Session 18 helpers - defensive prompting: parse the scratchpad away, check for a leaked prompt, and measure
+"""Defence Prompting helpers - defensive prompting: parse the scratchpad away, check for a leaked prompt, and measure
 whether an attack actually worked.
 
 Three ideas live here:
@@ -11,8 +11,7 @@ Three ideas live here:
   3. Attack success: an attack succeeded if the visible label is wrong for the genuine complaint, OR a leak
      marker shows up outside the scratchpad. "The model noticed the attempt" is not enough - the rules below are
      checked against what the customer (or your pipeline) would actually see.
-
-Takes a Lab (module02/reasoning_utils.py), the same as Sessions 15-17."""
+"""
 from __future__ import annotations
 
 import datetime
