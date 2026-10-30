@@ -1,4 +1,4 @@
-# Session 15 - loan eligibility, ten cases (2026-10-26)
+# Loan eligibility, ten cases (2026-10-30)
 
 Model: `openai/gpt-oss-20b`. Strategies: plain, cot, stepback, vote x5. A cell shows the answer, and ok or WRONG against the answer key.
 
@@ -8,11 +8,11 @@ Model: `openai/gpt-oss-20b`. Strategies: plain, cot, stepback, vote x5. A cell s
 | L02-ratio-narrow | decline | decline ok | decline ok | - | - |
 | L03-score-699 | decline | decline ok | decline ok | decline ok | decline ok |
 | L04-boundaries | approve | approve ok | approve ok | - | - |
-| L05-age-at-end | decline | decline ok | decline ok | decline ok | - |
+| L05-age-at-end | decline | decline ok | decline ok | - | - |
 | L06-age-60 | approve | approve ok | approve ok | - | - |
 | L07-existing-emis | decline | decline ok | decline ok | - | - |
 | L08-two-fail | decline | decline ok | decline ok | - | - |
 | L09-large-numbers | approve | approve ok | approve ok | approve ok | - |
-| L10-months | approve | approve ok | approve ok | - | - |
+| L10-months | approve | approve ok | approve ok | approve ok | - |
 | **Right** | | 10/10 | 10/10 | 3/3 | 1/1 |
-| **Average tokens per case** | | 478 | 759 | 1,431 | 3,657 |
+| **Average tokens per case** | | 470 | 752 | 1,666 | 4,170 |

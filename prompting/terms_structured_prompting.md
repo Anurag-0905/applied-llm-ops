@@ -1,4 +1,4 @@
-# Terms from Structured Prompting — what they are, and where they come back
+# Terms from Structured Prompting
 
 | Term | What it is | Say it as |
 |---|---|---|

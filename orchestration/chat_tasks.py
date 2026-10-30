@@ -1,12 +1,11 @@
-"""Session 19 data - chat state & memory windows: BankAssist, a multi-turn bank product-FAQ assistant.
+""" Data - chat state & memory windows: BankAssist, a multi-turn bank product-FAQ assistant.
 
-A new, standalone running example - not the Session 16/18 ticket classifier continued. Multi-turn memory is
+A new, standalone running example - not the ticket classifier. Multi-turn memory is
 easiest to feel with a conversation that NEEDS an early turn to answer a late one, and a classifier that labels
 one ticket and stops never creates that need.
 
   BANKASSIST_SYSTEM   the standing system prompt: BankAssist's role, tone, and the small FAQ fact sheet it may
-                       quote (rates, fees, eligibility) - a fixed knowledge base, not a RAG system (that is
-                       Module 4's job, on purpose).
+                       quote (rates, fees, eligibility) - a fixed knowledge base, not a RAG system. 
   RECALL_PROBE         a scripted 17-turn conversation. Turn 2 plants a fact ONLY the conversation itself can
                        supply - a reference number and two figures the customer states about themselves -
                        nothing a model could answer correctly from BANKASSIST_SYSTEM alone. Turns 3-16 are

@@ -1,4 +1,4 @@
-"""Session 11 helpers — three providers, one client library, and a tiny classifier
+"""Providers helpers — three providers, one client library, and a tiny classifier
 used for the temperature sweep. Imported by the notebook and the test."""
 from __future__ import annotations
 

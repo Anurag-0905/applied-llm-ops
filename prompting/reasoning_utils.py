@@ -1,4 +1,4 @@
-"""Session 15 helpers - make a model think, and measure what the thinking costs.
+"""Reasoning helpers - make a model think, and measure what the thinking costs.
 
 Four ways to ask the same question:
   plain             "Give only the answer."                       1 call
@@ -486,7 +486,7 @@ def accuracy_markdown(results: dict, problems: list, strategies: tuple, model: s
     """The accuracy table for the ten cases as a Markdown file you commit: one row per case, a totals row, and the cost."""
     import datetime
     today = today or datetime.date.today().isoformat()
-    lines = [f"# Session 15 - loan eligibility, ten cases ({today})", "",
+    lines = [f"# Loan eligibility, ten cases ({today})", "",
              f"Model: `{model}`. Strategies: {', '.join(strategies)}. A cell shows the answer, and ok or WRONG against the answer key.", "",
              "| Case | Right answer | " + " | ".join(strategies) + " |", "|---|---|" + "---|" * len(strategies)]
     for p in problems:

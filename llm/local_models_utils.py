@@ -1,4 +1,4 @@
-"""Session 12 helpers - quantization sizing, local model catalog, tool-calling probe,
+"""Local Model's helpers - quantization sizing, local model catalog, tool-calling probe,
 and the local-vs-hosted timing comparison. Reuses ollama_client(), time_stream() and
 ask() from the earlier sessions rather than duplicating them."""
 from __future__ import annotations

@@ -1,4 +1,4 @@
-"""Session 14 helpers - prompt anatomy, a versioned prompt library, and a self-check for your work repository.
+"""Prompt Anatomy helpers - prompt anatomy, a versioned prompt library, and a self-check for your work repository.
 
 Three ideas live here:
   1. A prompt has parts (role, task, context, constraints, output format, examples). PromptSpec holds them

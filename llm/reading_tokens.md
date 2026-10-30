@@ -1,4 +1,4 @@
-# Pre-read for Session 9b — ten minutes
+# Pre-read — ten minutes
 
 **What the model actually sees.** A language model never sees letters or words. It sees *tokens*: chunks of text, roughly three-quarters of an English word each, chosen by a fixed dictionary called a *tokenizer*. "EMI calculation" might be three tokens; a Telugu sentence of the same meaning might be ten, because the dictionary was built mostly from English and code.
 

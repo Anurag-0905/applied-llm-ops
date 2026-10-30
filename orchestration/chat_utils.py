@@ -142,7 +142,7 @@ def strategy_comparison_table(results: dict) -> str:
 def chat_memory_markdown(results: dict, model: str, *, today: str = None) -> str:
     today = today or datetime.date.today().isoformat()
     n_turns = results["naive"]["n_turns"]
-    lines = ["# Session 19: chat state & memory windows - naive vs sliding window vs summarization", "",
+    lines = ["# Chat state & memory windows - naive vs sliding window vs summarization", "",
              f"Model: `{model}` · Date: {today} · Scripted conversation: {n_turns} turns, a reference "
              f"number planted at turn 2, asked for again at turn {n_turns}", "",
              f"| Strategy | Turn-{n_turns} cost (tokens) | Recall succeeded |", "|---|---|---|"]

@@ -1,4 +1,4 @@
-# Terms from Prompt Anatomy — what they are, and where they come back
+# Terms from Prompt Anatomy
 
 | Term | What it is | Say it as |
 |---|---|---|

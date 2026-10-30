@@ -1,4 +1,4 @@
-"""Session 16 helpers - structured prompts: delimiters, templates with variables, a system prompt kept in a file, and a held-out test.
+"""Structured Prompting helpers - structured prompts: delimiters, templates with variables, a system prompt kept in a file, and a held-out test.
 
 Four ideas live here:
   1. Delimiters: customer text goes inside <ticket> tags, so a ticket that QUOTES an instruction is still just data.
@@ -263,7 +263,7 @@ def mistakes_table(rows: list, width: int = 62) -> str:
 def heldout_markdown(structured: dict, baseline: dict, model: str, *, k_per_label: int, system_sha: str = "", user_sha: str = "",
                      today: str = None) -> str:
     today = today or datetime.date.today().isoformat()
-    lines = ["# Session 16: held-out results for the support classifier", "",
+    lines = ["# Held-out results for the support classifier", "",
              f"Model: `{model}` · Date: {today} · system.md `{system_sha}` · user.j2 `{user_sha}` · examples per label: {k_per_label}", "",
              f"Held-out accuracy (structured): {pct(structured['right'], structured['n'])}",
              f"Baseline accuracy (one-line instruction): {pct(baseline['right'], baseline['n'])}", "",

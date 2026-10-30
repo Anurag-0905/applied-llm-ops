@@ -1,4 +1,4 @@
-# Terms from Reasoning — what they are, and where they come back
+# Terms from Reasoning
 
 | Term | What it is | Say it as |
 |---|---|---|

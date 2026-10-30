@@ -1,6 +1,6 @@
-"""data - the customer-support classifier, as a labelled set that is split once and never mixed again.
+"""Data - the customer-support classifier, as a labelled set that is split once and never mixed again.
 
-Every ticket is invented. The labels follow the bank's house rules (see GUIDE), the same convention as Session 14:
+Every ticket is invented. The labels follow the bank's house rules (see GUIDE), the same convention as Prompt Anatomy:
 UPI problems are `account`, and a request to change personal details is `other` even when it mentions a card or a loan.
 
   TRAIN    40 tickets, 8 per label: the pool few-shot examples are drawn from.

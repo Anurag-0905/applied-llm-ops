@@ -1,4 +1,4 @@
-"""Session 10 helpers - model catalog, monthly cost, hard constraints, weighted scoring, latency and quality checks.
+"""Model Matrix's helpers - model catalog, monthly cost, hard constraints, weighted scoring, latency and quality checks.
 Imported by the notebook and the test. No network is needed except time_stream()."""
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-# Terms from Defensive Prompting — what they are, and where they come back
+# Terms from Defensive Prompting
 
 | Term | What it is | Say it as |
 |---|---|---|
