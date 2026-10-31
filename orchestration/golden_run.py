@@ -1,9 +1,9 @@
-"""Session 20, instructor pre-class run: score the golden set four ways on one model and print the tables.
+"""Score the golden set four ways on one model and print the tables.
 
-    uv run python module03/s20_golden_run.py                         # whatever .env says
-    uv run python module03/s20_golden_run.py --ollama llama3.2:3b    # local Ollama model, ignores .env
+    uv run python orchestration/golden_run.py                         # whatever .env says
+    uv run python orchestration/golden_run.py --ollama llama3.2:3b    # local Ollama model, ignores .env
 
-Answers are cached in ~/.genai_course/s20_cache.json (re-running is free and gives the same numbers).
+Answers are cached in C:\Users\HP\Desktop\FSDS\gen_ai\applied-llm-opstools_cache.json (re-running is free and gives the same numbers).
 A JSON copy of every answer is written next to the cache, for the deck's model-comparison slide."""
 from __future__ import annotations
 

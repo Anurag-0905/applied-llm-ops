@@ -66,6 +66,16 @@ This repository contains my technical audits, benchmarks, and prototype deployme
 - **Business Impact:** I proved that XML tags alone fail to stop deliberate context confusion. I engineered a hardened architecture using explicit instruction hierarchies and programmatic scratchpad discarding to neutralize adversarial payloads. I reduced injection success rates to near-zero without degrading clean-ticket business accuracy, serializing the audit to an immutable CI/CD markdown report.
 - **File:** `prompting/defensive_prompting.ipynb`
 
+### 11. Chat State Architecture & Memory Windows
+- **Objective:** I audited conversational state management for LLM pipelines to solve context exhaustion and compounding API costs.
+- **Business Impact:** I demonstrated that LLM APIs are inherently stateless, and blindly passing raw conversation history scales token costs linearly. I engineered and benchmarked two enterprise memory architectures—Sliding Windows (truncation) and Summarization Compression (secondary LLM reduction)—to balance token expenditure against factual recall, proving that long-running agents require explicit token budgeting strategies.
+- **File:** `prompting/chat_memory.ipynb`
+
+### 12. Deterministic Tool Execution & Agentic Routing
+- **Objective:** I engineered a secure function-calling orchestration layer to bridge stochastic LLM text generation with rigid external APIs and mathematical computations.
+- **Business Impact:** I eliminated native computation hallucinations by restricting the model to JSON schema outputs mapped to Python execution functions. To prevent over-calling and argument hallucination, I implemented strict code-level type validation, autonomous self-correction loops, and an upstream intent router that completely blocks function schemas from reaching the model during conversational FAQ interactions.
+- **File:** `prompting/function_calling.ipynb`
+
 ---
 
 ## ⚙️ Execution & Reproduction
