@@ -25,7 +25,7 @@ from structured_tasks import HELDOUT
 from structured_utils import build_messages, pick_examples
 
 REPORT_PATH = Path("experiments") / "defense.md"
-DEFENCE_CACHE = Path.home() / "Desktop" / "FSDS" / "gen_ai" / "applied-llm-ops" / "defense_cache.json"
+DEFENCE_CACHE = Path.cwd() / "defense_cache.json"
 _SCRATCH_RE = re.compile(r"<scratchpad>(.*?)</scratchpad>", re.IGNORECASE | re.DOTALL)
 _FINAL_RE = re.compile(r"<final>(.*?)</final>", re.IGNORECASE | re.DOTALL)
 

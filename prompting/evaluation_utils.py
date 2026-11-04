@@ -17,6 +17,7 @@ from __future__ import annotations
 import datetime
 import hashlib
 import json
+import os
 import re
 from pathlib import Path
 
@@ -27,7 +28,7 @@ from prompt_utils import CheckResult
 from structured_utils import PromptFileError, SUPPORT_DIR, SYSTEM_FILE, USER_FILE, load_prompt_file, pick_examples, structured_maker
 
 REPORT_PATH = Path("experiments") / "eval.md"
-EVAL_CACHE = Path.home() / "Desktop" / "FSDS" / "gen_ai" / "applied-llm-ops" / "eval_cache.json"
+EVAL_CACHE = Path.cwd() / "eval_cache.json"
 
 
 # ---------------------------------------------------------------- templates: the same strict-undefined engine as Structured Prompting, so the same errors if you forget a variable

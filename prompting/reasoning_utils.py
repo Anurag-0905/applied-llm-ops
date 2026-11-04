@@ -14,6 +14,7 @@ from __future__ import annotations
 import dataclasses
 import hashlib
 import json
+import os
 import re
 import time
 from collections import Counter
@@ -112,7 +113,7 @@ def majority_vote(keys: list) -> tuple:
 
 
 # ---------------------------------------------------------------- an on-disk memory of answers, and a meter
-DEFAULT_CACHE = Path.home()  /"Desktop"/"FSDS"/"gen_ai"/"applied-llm-ops"
+DEFAULT_CACHE = Path(os.getenv("WORK_REPO", Path.cwd())) / "tools_cache.json"
 
 
 class DiskCache:

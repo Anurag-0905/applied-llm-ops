@@ -7,10 +7,10 @@
 This repository contains my technical audits, benchmarks, and prototype deployments of Large Language Models (LLMs) and agentic frameworks. My objective is to bridge the gap between raw data science concepts and operational business strategy by evaluating model deployment costs, latency trade-offs, vector embeddings, and deterministic routing logic for enterprise pipelines.
 
 ## 🛠️ Core Competencies & Tech Stack
-- **LLM Orchestration & APIs:** Groq, Google Gemini, Ollama (Local open-weight models).
+- **LLM Orchestration & APIs:** Groq, Google Gemini, Ollama (Local open-weight models), LangChain.
 - **Edge Compute & Telemetry:** Evaluating Time to First Token (TTFT), Tokens per Second (TPS), and quantization hardware constraints.
-- **Agentic Frameworks:** Intent classification, multi-provider routing, and deterministic tool calling.
-- **Tech Stack:** Python, `uv` (dependency management), NumPy, Matplotlib, `tiktoken`.
+- **Agentic Frameworks:** Intent classification, multi-provider routing, LCEL pipelines, and deterministic tool calling.
+- **Tech Stack:** Python, `uv` (dependency management), Pydantic, NumPy, Matplotlib, `tiktoken`.
 
 ---
 
@@ -75,6 +75,11 @@ This repository contains my technical audits, benchmarks, and prototype deployme
 - **Objective:** I engineered a secure function-calling orchestration layer to bridge stochastic LLM text generation with rigid external APIs and mathematical computations.
 - **Business Impact:** I eliminated native computation hallucinations by restricting the model to JSON schema outputs mapped to Python execution functions. To prevent over-calling and argument hallucination, I implemented strict code-level type validation, autonomous self-correction loops, and an upstream intent router that completely blocks function schemas from reaching the model during conversational FAQ interactions.
 - **File:** `orchestration/function_calling.ipynb`
+
+### 13. Framework Abstraction & LangChain Orchestration
+- **Objective:** I transitioned raw REST API tool execution into a scalable LangChain pipeline.
+- **Business Impact:** I eliminated hand-written JSON schema maintenance by leveraging Python type hints for automated OpenAI-compliant schema generation. I implemented LangChain Expression Language (LCEL) to decouple system contracts from runtime execution, standardizing multi-provider routing (Ollama/Groq) behind a unified message interface while strictly bounding the agentic loop to prevent infinite execution costs.
+- **File:** `orchestration/langchain_build.ipynb` & `orchestration/bankassist_lc.py`
 
 ---
 

@@ -12,6 +12,7 @@ from __future__ import annotations
 import datetime
 import hashlib
 import json
+import os
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -27,7 +28,7 @@ SUPPORT_DIR = Path("prompts") / "support_classifier"
 SYSTEM_FILE, USER_FILE = "system.md", "user.j2"
 REPORT_PATH = Path("experiments") / "heldout.md"
 EXAMPLES_PER_LABEL = 2
-STRUCTURED_CACHE = Path.home() / "Desktop" / "FSDS" / "gen_ai" / "applied-llm-ops" / "structured_cache.json"     # answers are remembered here, so a re-run is free
+STRUCTURED_CACHE = Path(os.getenv("WORK_REPO", Path.cwd())) / "structured_cache.json"     # answers are remembered here, so a re-run is free
 
 
 # ---------------------------------------------------------------- templates: variables, loops, and a loud failure
