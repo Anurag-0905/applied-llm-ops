@@ -7,7 +7,7 @@
 This repository contains my technical audits, benchmarks, and prototype deployments of Large Language Models (LLMs) and agentic frameworks. My objective is to bridge the gap between raw data science concepts and operational business strategy by evaluating model deployment costs, latency trade-offs, vector embeddings, and deterministic routing logic for enterprise pipelines.
 
 ## 🛠️ Core Competencies & Tech Stack
-- **LLM Orchestration & APIs:** Groq, Google Gemini, Ollama (Local open-weight models), LangChain.
+- **LLM Orchestration & APIs:** Groq, Google Gemini, Ollama (Local open-weight models), LangChain, LiteLLM.
 - **Edge Compute & Telemetry:** Evaluating Time to First Token (TTFT), Tokens per Second (TPS), and quantization hardware constraints.
 - **Agentic Frameworks:** Intent classification, multi-provider routing, LCEL pipelines, and deterministic tool calling.
 - **Tech Stack:** Python, `uv` (dependency management), Pydantic, NumPy, Matplotlib, `tiktoken`.
@@ -79,7 +79,12 @@ This repository contains my technical audits, benchmarks, and prototype deployme
 ### 13. Framework Abstraction & LangChain Orchestration
 - **Objective:** I transitioned raw REST API tool execution into a scalable LangChain pipeline.
 - **Business Impact:** I eliminated hand-written JSON schema maintenance by leveraging Python type hints for automated OpenAI-compliant schema generation. I implemented LangChain Expression Language (LCEL) to decouple system contracts from runtime execution, standardizing multi-provider routing (Ollama/Groq) behind a unified message interface while strictly bounding the agentic loop to prevent infinite execution costs.
-- **File:** `orchestration/langchain_build.ipynb` & `orchestration/bankassist_lc.py`
+- **File:** `orchestration/langchain_build.ipynb`
+
+### 14. API Gateway & Cost Economics (LiteLLM)
+- **Objective:** I engineered a resilient LLM gateway to abstract provider-specific SDKs, enabling seamless switching between Groq, Ollama, and OpenAI architectures.
+- **Business Impact:** I implemented automated fallback routing to prevent hard outages and rate-limit drops from degrading the customer experience. I built real-time token cost accounting pipelines to map compute expenditure directly to individual model interactions, ensuring strict budget observability.
+- **File:** `orchestration/litellm_gateway.ipynb`
 
 ---
 
