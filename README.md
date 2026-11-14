@@ -10,7 +10,8 @@ This repository contains my technical audits, benchmarks, and prototype deployme
 - **LLM Orchestration & APIs:** Groq, Google Gemini, Ollama (Local open-weight models), LangChain, LiteLLM.
 - **Edge Compute & Telemetry:** Evaluating Time to First Token (TTFT), Tokens per Second (TPS), and quantization hardware constraints.
 - **Agentic Frameworks:** Intent classification, multi-provider routing, LCEL pipelines, and deterministic tool calling.
-- **Tech Stack:** Python, `uv` (dependency management), Pydantic, NumPy, Matplotlib, `tiktoken`.
+- **Backend Architecture:** FastAPI, Uvicorn, Pydantic, Server-Sent Events (SSE).
+- **Tech Stack:** Python, `uv` (dependency management), NumPy, Matplotlib, `tiktoken`.
 
 ---
 
@@ -85,6 +86,11 @@ This repository contains my technical audits, benchmarks, and prototype deployme
 - **Objective:** I engineered a resilient LLM gateway to abstract provider-specific SDKs, enabling seamless switching between Groq, Ollama, and OpenAI architectures.
 - **Business Impact:** I implemented automated fallback routing to prevent hard outages and rate-limit drops from degrading the customer experience. I built real-time token cost accounting pipelines to map compute expenditure directly to individual model interactions, ensuring strict budget observability.
 - **File:** `orchestration/litellm_gateway.ipynb`
+
+### 15. API Orchestration & Streaming (FastAPI)
+- **Objective:** I engineered a production-grade FastAPI server to deploy agentic workflows behind a stateless HTTP interface.
+- **Business Impact:** I reduced perceived latency via Server-Sent Events (SSE) streaming. I implemented strict Pydantic payload validation to reject malformed requests (HTTP 422) before consuming token budgets, and designed scalable in-memory sliding windows to manage concurrent conversational states across isolated sessions.
+- **File:** `orchestration/fastapi_server.ipynb` & `orchestration/bankassist_fastAPI/app.py`
 
 ---
 
