@@ -1,8 +1,3 @@
-"""Session 24 - the ten test questions, written the way customers type them.
-
-Most of them share few or no words with the article that answers them. That's the point: keyword search should
-struggle, meaning search shouldn't. Each pair is (question, the help-centre article that answers it).
-"""
 
 CASES = [
     ("my earbuds stopped working after two months", "warranty"),

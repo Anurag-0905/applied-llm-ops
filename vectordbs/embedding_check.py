@@ -1,4 +1,4 @@
-"""Session 24 checker - imports YOUR <work repo>/s24/search.py and tests the four TODOs. Offline: no model needed
+"""Session 24 checker - imports YOUR <work repo>/embedding/search.py and tests the four TODOs. Offline: no model needed
 for TODOs 1-4; the last check only looks for the results.md your run wrote."""
 from __future__ import annotations
 
@@ -9,26 +9,25 @@ from pathlib import Path
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
-STUDENT_PATH = Path("s24") / "search.py"
+REPO_PATH = Path("embedding") / "search.py"
 ARTICLES = {p.stem for p in (HERE / "help_centre").glob("*.md")}
 
 
 def load_module(path: Path):
     sys.path.insert(0, str(HERE))
-    spec = importlib.util.spec_from_file_location(f"s24_student_{abs(hash(path))}", path)
+    spec = importlib.util.spec_from_file_location(f"embedding_repo_{abs(hash(path))}", path)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
 
 
-def check_s24_work(path: Path) -> list[str]:
+def check_embedding_work(path: Path) -> list[str]:
     """Returns a list of problems. Empty list = everything passes."""
     problems: list[str] = []
     if not path.exists():
-        return [f"{path} not found - run:  uv run python module04/s24_setup.py"]
+        return [f"{path} not found - run:  uv run python module04/embedding_setup.py"]
     mod = load_module(path)
 
-    # TODO 1 - cosine
     try:
         c = mod.cosine
         cases = [([1, 0], [1, 0], 1.0), ([1, 0], [0, 1], 0.0), ([1, 0], [-1, 0], -1.0), ([3, 4], [6, 8], 1.0),
@@ -43,7 +42,6 @@ def check_s24_work(path: Path) -> list[str]:
     except Exception as e:
         problems.append(f"TODO 1 cosine() crashed: {type(e).__name__}: {e}")
 
-    # TODO 2 - top_k
     try:
         m = np.array([[0, 1], [1, 0], [1, 1], [-1, 0]], float)
         got = mod.top_k(np.array([1, 0], float), m, 2)
@@ -57,7 +55,6 @@ def check_s24_work(path: Path) -> list[str]:
     except Exception as e:
         problems.append(f"TODO 2 top_k() crashed: {type(e).__name__}: {e}")
 
-    # TODO 3 - split_sections
     try:
         sample = "---\nid: x\n---\n# Title\nintro line\n## A\none\ntwo\n## B\n\n## C\n  three  \n"
         got = mod.split_sections(sample)
@@ -72,12 +69,11 @@ def check_s24_work(path: Path) -> list[str]:
     except Exception as e:
         problems.append(f"TODO 3 split_sections() crashed: {type(e).__name__}: {e}")
 
-    # TODO 4 - three questions of your own
     my = getattr(mod, "MY_CASES", [])
     if len(my) < 3:
         problems.append(f"TODO 4 MY_CASES has {len(my)} questions, needs 3")
     else:
-        from s24_queries import CASES
+        from embedding_queries import CASES
         course_q = {q.lower() for q, _ in CASES}
         for q, doc in my:
             if doc not in ARTICLES:

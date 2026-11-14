@@ -1,9 +1,9 @@
-"""Session 24 - one command to get your homework file ready. Run it from the COURSE repo folder:
+"""Session 25 - one command to get your homework file ready. Run it from the COURSE repo folder:
 
-    uv run python module04/s24_setup.py
+    uv run python module04/s25_setup.py
 
-It reads WORK_REPO from your .env (or the shell), copies module04/s24_homework.py into YOUR work repo as s24/search.py,
-and prints the exact commands for the rest. Safe to run again: it never overwrites your s24/search.py unless you add
+It reads WORK_REPO from your .env (or the shell), copies module04/s25_homework.py into YOUR work repo as s25/store.py,
+and prints the exact commands for the rest. Safe to run again: it never overwrites your s25/store.py unless you add
 --fresh.
 """
 import os
@@ -14,7 +14,7 @@ from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 
 ROOT = Path(__file__).resolve().parents[1]
-SRC = ROOT / "module04" / "s24_homework.py"
+SRC = ROOT / "module04" / "s25_homework.py"
 
 
 def main() -> None:
@@ -29,7 +29,7 @@ def main() -> None:
     if repo.resolve() == ROOT:
         sys.exit("WORK_REPO points at the COURSE repo. It must be your own work repository.")
 
-    dst = repo / "s24" / "search.py"
+    dst = repo / "s25" / "store.py"
     dst.parent.mkdir(exist_ok=True)
     if dst.exists() and "--fresh" not in sys.argv:
         print(f"Kept your existing {dst}  (add --fresh to start again from the original)")
@@ -39,11 +39,11 @@ def main() -> None:
 
     sep = "\\" if os.name == "nt" else "/"
     print("\nNext (stay in this course repo folder):")
-    print(f"  Read first:      uv run jupyter lab module04{sep}s24_embeddings.ipynb")
+    print(f"  Read first:      uv run jupyter lab module04{sep}s25_vector_db.ipynb")
     print(f"  Edit in VS Code: {dst}   (four TODOs)")
     print(f"  Run it:          uv run python \"{dst}\"")
-    print("  Check it:        uv run pytest tests/test_s24.py -rs")
-    print(f"  Commit:          cd \"{repo}\"  then  git add s24  ;  git commit -m \"S24: semantic search\"  ;  git push")
+    print("  Check it:        uv run pytest tests/test_s25.py -rs")
+    print(f"  Commit:          cd \"{repo}\"  then  git add s25  ;  git commit -m \"S25: vector database\"  ;  git push")
 
 
 if __name__ == "__main__":

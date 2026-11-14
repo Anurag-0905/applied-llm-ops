@@ -24,7 +24,7 @@ import numpy as np
 
 HERE = Path(__file__).resolve().parent
 KB_DIR = HERE / "help_centre"
-CACHE_DIR = HERE / ".s24_cache"            # vectors of the 53 chunks, per model - so a second run is instant
+CACHE_DIR = HERE / ".embedding_cache"            # vectors of the 53 chunks, per model - so a second run is instant
 
 MODELS = {
     # short name : (where it runs, the model id, dimensions)

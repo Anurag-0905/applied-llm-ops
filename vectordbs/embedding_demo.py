@@ -1,11 +1,11 @@
 """Session 24 - embeddings, live. Run from the COURSE repo folder; every command prints one thing to talk about.
 
-    uv run python module04/s24_demo.py embed "return a damaged item"            # text -> 384 numbers
-    uv run python module04/s24_demo.py similar "damaged item" "broken product" "gift card"   # cosine table
-    uv run python module04/s24_demo.py keyword "my earbuds stopped working"     # the OLD way: shared words
-    uv run python module04/s24_demo.py search "my earbuds stopped working"      # meaning search, top 3
-    uv run python module04/s24_demo.py compare                                  # keyword vs two embedding models
-    uv run python module04/s24_demo.py check                                    # the 10 test questions, pass mark 8
+    uv run python module04/embedding_demo.py embed "return a damaged item"            # text -> 384 numbers
+    uv run python module04/embedding_demo.py similar "damaged item" "broken product" "gift card"   # cosine table
+    uv run python module04/embedding_demo.py keyword "my earbuds stopped working"     # the OLD way: shared words
+    uv run python module04/embedding_demo.py search "my earbuds stopped working"      # meaning search, top 3
+    uv run python module04/embedding_demo.py compare                                  # keyword vs two embedding models
+    uv run python module04/embedding_demo.py check                                    # the 10 test questions, pass mark 8
 
 Options:  --model bge-small | minilm | nomic      (nomic needs Ollama running and `ollama pull nomic-embed-text`)
           --ollama                                  (compare: also include nomic)
@@ -17,8 +17,8 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from s24_queries import CASES, OUT_OF_SCOPE, PASS_MARK  # noqa: E402
-from s24_utils import DEFAULT_MODEL, MODELS, Embedder, Index, cosine, evaluate, keyword_search, load_chunks  # noqa: E402
+from embedding_queries import CASES, OUT_OF_SCOPE, PASS_MARK  # noqa: E402
+from embedding_utils import DEFAULT_MODEL, MODELS, Embedder, Index, cosine, evaluate, keyword_search, load_chunks  # noqa: E402
 
 
 def line(char: str = "-", n: int = 92) -> None:
@@ -116,7 +116,7 @@ def cmd_check(args) -> None:
         score, c = index.search(q, 1)[0]
         print(f"        {q:48} best {score:.2f}  {c.source}")
     print(f"\nhit@3 {r['hits']}/{r['n']}   MRR {r['mrr']:.2f}   pass mark {PASS_MARK}/{r['n']}")
-    print("PASS" if r["hits"] >= PASS_MARK else "BELOW THE PASS MARK - see module04/s24_common_errors.md")
+    print("PASS" if r["hits"] >= PASS_MARK else "BELOW THE PASS MARK - see module04/embedding_common_errors.md")
     sys.exit(0 if r["hits"] >= PASS_MARK else 1)
 
 
