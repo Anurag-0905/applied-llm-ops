@@ -1,13 +1,3 @@
-"""Session 25 helpers - a real vector database (ChromaDB) for the Northwind help centre, and an ANN experiment.
-
-    open_db() / build_collection()   the 53 help-centre sections + vectors + metadata, saved to disk (module04/.s25_chroma)
-    search()                         semantic search INSIDE the database, with optional metadata filters
-    clustered_vectors() + exact_top_k() + hnsw_run()
-                                     the speed-vs-accuracy experiment: 20,000 vectors, brute force vs three HNSW settings
-
-ChromaDB runs inside your Python process and keeps its files on disk: no server, no Docker, no account.
-We give it OUR vectors (bge-small from Session 24), so it never downloads a model of its own.
-"""
 from __future__ import annotations
 
 import json
@@ -17,10 +7,10 @@ from pathlib import Path
 
 import numpy as np
 
-import s24_utils as S24
+import embedding_utils as EMBEDDING
 
 HERE = Path(__file__).resolve().parent
-DB_DIR = HERE / ".s25_chroma"
+DB_DIR = HERE / ".vdb_chroma"
 META = json.loads((HERE / "help_centre_meta.json").read_text(encoding="utf-8"))
 COLLECTION = "help_centre"
 
@@ -39,7 +29,7 @@ def date_int(iso: str) -> int:
     return d.year * 10000 + d.month * 100 + d.day
 
 
-def metadata_for(chunk: S24.Chunk) -> dict:
+def metadata_for(chunk: EMBEDDING.Chunk) -> dict:
     """What we store next to each vector - the labels we can filter on."""
     m = META[chunk.doc_id]
     return {"doc_id": chunk.doc_id, "title": chunk.title, "heading": chunk.heading,
@@ -69,11 +59,11 @@ def open_db(path: Path | None = DB_DIR):
     return chromadb.PersistentClient(path=str(path), settings=settings)
 
 
-def build_collection(client, embedder: S24.Embedder, chunks: list[S24.Chunk] | None = None,
+def build_collection(client, embedder: EMBEDDING.Embedder, chunks: list[EMBEDDING.Chunk] | None = None,
                      make_metadata=metadata_for, name: str = COLLECTION):
     """Create (or re-create) the collection and load every section: id + vector + metadata + text."""
-    chunks = chunks or S24.load_chunks()
-    vectors = S24.Index(embedder, chunks).vectors                 # cached from Session 24 if you ran it
+    chunks = chunks or EMBEDDING.load_chunks()
+    vectors = EMBEDDING.Index(embedder, chunks).vectors                 # cached from Session 24 if you ran it
     try:
         client.delete_collection(name)
     except Exception:
@@ -93,7 +83,7 @@ def get_collection(client, name: str = COLLECTION):
         raise RuntimeError("The collection doesn't exist yet. Run:  uv run python module04/s25_demo.py load") from e
 
 
-def search(col, embedder: S24.Embedder, question: str, k: int = 3, where: dict | None = None) -> list[dict]:
+def search(col, embedder: EMBEDDING.Embedder, question: str, k: int = 3, where: dict | None = None) -> list[dict]:
     """Embed the question (query mode), let the database find the nearest k, optionally filtered."""
     q = embedder.embed([question], kind="query")[0]
     r = col.query(query_embeddings=[q.tolist()], n_results=k, where=where,
@@ -111,7 +101,7 @@ def clustered_vectors(n: int, dims: int = 384, topics: int = 200, n_queries: int
     centres = rng.standard_normal((topics, dims))
     x = centres[rng.integers(0, topics, n)] + 0.6 * rng.standard_normal((n, dims))
     q = centres[rng.integers(0, topics, n_queries)] + 0.6 * rng.standard_normal((n_queries, dims))
-    return S24.normalise(x).astype(np.float32), S24.normalise(q).astype(np.float32)
+    return EMBEDDING.normalise(x).astype(np.float32), EMBEDDING.normalise(q).astype(np.float32)
 
 
 def exact_top_k(vectors: np.ndarray, queries: np.ndarray, k: int = 10) -> list[list[int]]:

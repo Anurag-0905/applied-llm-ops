@@ -82,7 +82,7 @@ def main() -> None:
     report = ["# Session 26 - my migration results", "", f"Target: {where}", "",
               "## Same results? (YOUR overlap_at_k, top 3)", "", "| question | overlap |", "|---|---|"]
 
-    from s25_utils import get_collection, open_db, search
+    from vectordbs.vdb_utils import get_collection, open_db, search
     chroma = get_collection(open_db())
     for q in QUESTIONS:
         before = [h["id"] for h in search(chroma, emb, q, 3)]

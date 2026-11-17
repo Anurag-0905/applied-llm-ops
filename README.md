@@ -11,6 +11,7 @@ This repository contains my technical audits, benchmarks, and prototype deployme
 - **Edge Compute & Telemetry:** Evaluating Time to First Token (TTFT), Tokens per Second (TPS), and quantization hardware constraints.
 - **Agentic Frameworks:** Intent classification, multi-provider routing, LCEL pipelines, and deterministic tool calling.
 - **Backend Architecture:** FastAPI, Uvicorn, Pydantic, Server-Sent Events (SSE).
+- **Retrieval & Vector Math:** Dense Embeddings (`BAAI/bge-small-en-v1.5`, `all-MiniLM-L6-v2`), Cosine Similarity, MRR Benchmarking.
 - **Tech Stack:** Python, `uv` (dependency management), NumPy, Matplotlib, `tiktoken`.
 
 ---
@@ -91,6 +92,11 @@ This repository contains my technical audits, benchmarks, and prototype deployme
 - **Objective:** I engineered a production-grade FastAPI server to deploy agentic workflows behind a stateless HTTP interface.
 - **Business Impact:** I reduced perceived latency via Server-Sent Events (SSE) streaming. I implemented strict Pydantic payload validation to reject malformed requests (HTTP 422) before consuming token budgets, and designed scalable in-memory sliding windows to manage concurrent conversational states across isolated sessions.
 - **File:** `orchestration/fastapi_server.ipynb` & `orchestration/bankassist_fastAPI/app.py`
+
+### 16. Semantic Search & Dense Embeddings (Retrieval Architecture)
+- **Objective:** I engineered the retrieval layer (the "R" in RAG) using offline dense vector embeddings to map unstructured enterprise knowledge by semantic meaning, benchmarking it against sparse keyword search.
+- **Business Impact:** I proved that legacy keyword (BM25) search fails entirely on synonymous queries (MRR: 0.50), rendering it unfit for intent routing. By transitioning to a 384-dimensional dense vector space (`bge-small-en-v1.5`) and executing cosine similarity sweeps, I achieved a perfect `hit@3` score (10/10) with an MRR of 0.95. I also quantified the necessity of strict cosine thresholds (e.g., 0.63) to block irrelevant out-of-scope retrievals from reaching the LLM, preventing downstream hallucinations.
+- **File:** `vectordbs/embeddings.ipynb` & `vectordbs/search.py`
 
 ---
 

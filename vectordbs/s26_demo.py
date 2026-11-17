@@ -20,7 +20,7 @@ from dotenv import find_dotenv, load_dotenv  # noqa: E402
 
 load_dotenv(find_dotenv(usecwd=True))
 import s24_utils as S24  # noqa: E402
-import s25_utils as S25  # noqa: E402
+import vectordbs.vdb_utils as S25  # noqa: E402
 import s26_utils as S26  # noqa: E402
 
 

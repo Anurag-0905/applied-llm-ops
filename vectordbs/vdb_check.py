@@ -1,4 +1,3 @@
-"""Session 25 checker - imports YOUR <work repo>/s25/store.py and tests the four TODOs. Offline: no model needed."""
 from __future__ import annotations
 
 import importlib.util
@@ -6,39 +5,39 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-STUDENT_PATH = Path("s25") / "store.py"
+REPO_PATH = Path("vectordbs") / "store.py"
 CATEGORIES = {"orders", "payments", "returns", "account", "products"}
 
 
 def load_module(path: Path):
     sys.path.insert(0, str(HERE))
-    spec = importlib.util.spec_from_file_location(f"s25_student_{abs(hash(path))}", path)
+    spec = importlib.util.spec_from_file_location(f"vdb_repo_{abs(hash(path))}", path)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
 
 
-def check_s25_work(path: Path) -> list[str]:
+def check_vdb_work(path: Path) -> list[str]:
     """Returns a list of problems. Empty list = everything passes."""
     if not path.exists():
-        return [f"{path} not found - run:  uv run python module04/s25_setup.py"]
-    import s24_utils as S24
+        return [f"{path} not found - run:  uv run python vectordbs/vdb_setup.py"]
+    import embedding_utils as EMBEDDING
     mod = load_module(path)
     problems: list[str] = []
 
     # TODO 1
     try:
-        chunk = S24.Chunk("refunds", "Refunds", "Refund timeline", "text")
+        chunk = EMBEDDING.Chunk("refunds", "Refunds", "Refund timeline", "text")
         got = mod.make_metadata(chunk, {"category": "payments", "updated": "2026-03-02"})
         want = {"doc_id": "refunds", "category": "payments", "updated": 20260302}
         if got != want:
-            problems.append(f"TODO 1 make_metadata(...) returned {got!r}, expected {want!r}")
+            problems.append(f"make_metadata(...) returned {got!r}, expected {want!r}")
         elif not isinstance(got["updated"], int):
-            problems.append("TODO 1 'updated' must be an int like 20260302, not a string")
+            problems.append("'updated' must be an int like 20260302, not a string")
     except NotImplementedError:
-        problems.append("TODO 1 make_metadata() is not written yet")
+        problems.append("make_metadata() is not written yet")
     except Exception as e:
-        problems.append(f"TODO 1 make_metadata() crashed: {type(e).__name__}: {e}")
+        problems.append(f"make_metadata() crashed: {type(e).__name__}: {e}")
 
     # TODO 2
     try:
@@ -49,12 +48,12 @@ def check_s25_work(path: Path) -> list[str]:
         for args, want in cases:
             got = mod.build_where(*args)
             if got != want:
-                problems.append(f"TODO 2 build_where{args} returned {got!r}, expected {want!r}")
+                problems.append(f"build_where{args} returned {got!r}, expected {want!r}")
                 break
     except NotImplementedError:
-        problems.append("TODO 2 build_where() is not written yet")
+        problems.append("build_where() is not written yet")
     except Exception as e:
-        problems.append(f"TODO 2 build_where() crashed: {type(e).__name__}: {e}")
+        problems.append(f"build_where() crashed: {type(e).__name__}: {e}")
 
     # TODO 3
     try:
@@ -65,29 +64,29 @@ def check_s25_work(path: Path) -> list[str]:
         for args, want in cases:
             got = mod.recall_at_k(*args)
             if not isinstance(got, float) or abs(got - want) > 1e-9:
-                problems.append(f"TODO 3 recall_at_k{args} returned {got!r}, expected {want}")
+                problems.append(f"recall_at_k{args} returned {got!r}, expected {want}")
                 break
     except NotImplementedError:
-        problems.append("TODO 3 recall_at_k() is not written yet")
+        problems.append("recall_at_k() is not written yet")
     except Exception as e:
-        problems.append(f"TODO 3 recall_at_k() crashed: {type(e).__name__}: {e}")
+        problems.append(f"recall_at_k() crashed: {type(e).__name__}: {e}")
 
     # TODO 4
     mine = getattr(mod, "MY_FILTERED", [])
     if len(mine) < 2:
-        problems.append(f"TODO 4 MY_FILTERED has {len(mine)} questions, needs 2")
+        problems.append(f"MY_FILTERED has {len(mine)} questions, needs 2")
     else:
         if not any(c and s for _, c, s in mine):
-            problems.append("TODO 4 at least one of your questions must use BOTH a category and a since-date")
+            problems.append("MY_FILTERED at least one of your questions must use BOTH a category and a since-date")
         for q, c, s in mine:
             if c is not None and c not in CATEGORIES:
-                problems.append(f"TODO 4 category {c!r} doesn't exist - use one of {sorted(CATEGORIES)}")
+                problems.append(f"MY_FILTERED category {c!r} doesn't exist - use one of {sorted(CATEGORIES)}")
             if s is not None:
                 try:
                     from datetime import date
                     date.fromisoformat(s)
                 except ValueError:
-                    problems.append(f"TODO 4 since-date {s!r} isn't YYYY-MM-DD")
+                    problems.append(f"MY_FILTERED since-date {s!r} isn't YYYY-MM-DD")
 
     results = path.with_name("results.md")
     if not results.exists():

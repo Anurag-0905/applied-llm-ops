@@ -16,14 +16,14 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import s24_utils as S24  # noqa: E402
-from s25_utils import (COLLECTION, DB_DIR, HNSW_PRESETS, build_collection, clustered_vectors, exact_top_k,  # noqa: E402
+import embedding_utils as EMBEDDING  # noqa: E402
+from vectordbs.vdb_utils import (COLLECTION, DB_DIR, HNSW_PRESETS, build_collection, clustered_vectors, exact_top_k,  # noqa: E402
                        get_collection, hnsw_run, open_db, recall_at_k, search, where_filter)
 
 
 def cmd_load(args) -> None:
     t0 = time.perf_counter()
-    col = build_collection(open_db(), S24.Embedder())
+    col = build_collection(open_db(), EMBEDDING.Embedder())
     print(f"collection '{COLLECTION}': {col.count()} rows, saved in {DB_DIR}   ({time.perf_counter() - t0:.1f} s)")
     print("each row = id + 384-number vector + metadata (doc, category, updated date) + the section text")
 
@@ -43,7 +43,7 @@ def cmd_search(args) -> None:
     col = get_collection(open_db())
     where = where_filter(args.category, args.since)
     print(f'"{args.text}"' + (f"   filter: {where}" if where else "   (no filter)") + "\n")
-    hits = search(col, S24.Embedder(), args.text, args.k, where)
+    hits = search(col, EMBEDDING.Embedder(), args.text, args.k, where)
     if not hits:
         print("   no rows match that filter")
     for h in hits:
@@ -52,7 +52,7 @@ def cmd_search(args) -> None:
 
 
 def cmd_update(args) -> None:
-    client, emb = open_db(), S24.Embedder()
+    client, emb = open_db(), EMBEDDING.Embedder()
     col = get_collection(client)
     q = "can I pay in instalments with my credit card"
     print(f'before: "{q}"')

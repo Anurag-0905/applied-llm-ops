@@ -21,7 +21,7 @@ from pathlib import Path
 import numpy as np
 
 import s24_utils as S24
-import s25_utils as S25
+import vectordbs.vdb_utils as S25
 
 HERE = Path(__file__).resolve().parent
 LOCAL_QDRANT = HERE / ".s26_qdrant"                     # in-process Qdrant files, used when no server is running
