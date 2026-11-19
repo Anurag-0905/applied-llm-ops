@@ -14,7 +14,7 @@ from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 
 ROOT = Path(__file__).resolve().parents[1]
-SRC = ROOT / "module04" / "s26_homework.py"
+SRC = ROOT / "vectordbs" / "vs_migrate.py"
 
 
 def main() -> None:
@@ -29,7 +29,7 @@ def main() -> None:
     if repo.resolve() == ROOT:
         sys.exit("WORK_REPO points at the COURSE repo. It must be your own work repository.")
 
-    dst = repo / "s26" / "migrate.py"
+    dst = repo / "vectordbs" / "vs_migrate.py"
     dst.parent.mkdir(exist_ok=True)
     if dst.exists() and "--fresh" not in sys.argv:
         print(f"Kept your existing {dst}  (add --fresh to start again from the original)")

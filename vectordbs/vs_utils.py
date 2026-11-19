@@ -20,11 +20,11 @@ from pathlib import Path
 
 import numpy as np
 
-import s24_utils as S24
-import vectordbs.vdb_utils as S25
+import embedding_utils as EMBEDDING
+import vdb_utils as VDB
 
 HERE = Path(__file__).resolve().parent
-LOCAL_QDRANT = HERE / ".s26_qdrant"                     # in-process Qdrant files, used when no server is running
+LOCAL_QDRANT = HERE / ".vs_qdrant"                     # in-process Qdrant files, used when no server is running
 NOTES = json.loads((HERE / "customer_notes.json").read_text(encoding="utf-8"))
 DIMS = 384
 QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
@@ -32,18 +32,18 @@ PG_DSN = os.getenv("PG_DSN", "postgresql://course:course@localhost:5433/vectors"
 
 
 # ------------------------------------------------------------------------------------------- source: the S25 rows
-def chroma_rows(embedder: S24.Embedder | None = None) -> dict:
+def chroma_rows(embedder: EMBEDDING.Embedder | None = None) -> dict:
     """All rows of the S25 collection: {"ids", "embeddings", "metadatas", "documents"}. Builds it if missing."""
-    client = S25.open_db()
+    client = VDB.open_db()
     try:
-        col = client.get_collection(S25.COLLECTION)
+        col = client.get_collection(VDB.COLLECTION)
     except Exception:
-        col = S25.build_collection(client, embedder or S24.Embedder())
+        col = VDB.build_collection(client, embedder or EMBEDDING.Embedder())
     r = col.get(include=["embeddings", "metadatas", "documents"])
     order = sorted(range(len(r["ids"])), key=lambda i: r["ids"][i])      # stable order, easier to compare
     return {"ids": [r["ids"][i] for i in order], "embeddings": [list(map(float, r["embeddings"][i])) for i in order],
-            "metadatas": [r["metadatas"][i] for i in order], "documents": [r["documents"][i] for i in order]}
-
+            "metadatas": [r["metadatas"][i] for i in order], "documents": [r["documents"][i] for i in order]
+}
 
 def point_id(text_id: str) -> str:
     """Qdrant ids must be a number or a UUID. 'refunds#31' -> the same UUID every time (uuid5)."""
@@ -171,7 +171,7 @@ def load_notes() -> list[dict]:
     return NOTES
 
 
-def migrate_notes(client, embedder: S24.Embedder, name: str = "customer_notes") -> int:
+def migrate_notes(client, embedder: EMBEDDING.Embedder, name: str = "customer_notes") -> int:
     from qdrant_client import models
     if client.collection_exists(name):
         client.delete_collection(name)

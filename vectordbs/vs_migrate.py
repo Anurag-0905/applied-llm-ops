@@ -17,56 +17,72 @@ from dotenv import find_dotenv, load_dotenv  # noqa: E402
 from qdrant_client import models  # noqa: E402
 
 load_dotenv(find_dotenv(usecwd=True))
-import s24_utils as S24  # noqa: E402
-import s26_utils as S26  # noqa: E402
+import embedding_utils as EMBEDDING # noqa: E402
+import vs_utils as VS  # noqa: E402
 
 STORES = ["chroma", "qdrant", "pgvector", "pinecone", "weaviate"]
 
 
-# ======================================================================================= PART 2 - YOUR CODE
-def to_points(rows: dict) -> list:
-    """TODO 1 - the migration itself: ChromaDB rows -> Qdrant points.
+def to_points(rows: dict) -> list[models.PointStruct]:
+    ids = rows.get("ids") or []
+    embeddings = rows.get("embeddings") or []
+    metadatas = rows.get("metadatas") or [{} for _ in ids]
+    documents = rows.get("documents") or ["" for _ in ids]
 
-    rows = {"ids": [...], "embeddings": [...], "metadatas": [...], "documents": [...]}  (same position = same row)
-    Return one models.PointStruct per row:
-        id      = S26.point_id(<the chroma id>)       Qdrant ids must be a number or UUID; this makes a stable UUID
-        vector  = the embedding (a list of floats)
-        payload = the metadata dict, PLUS "text": <the document> and "chroma_id": <the chroma id>
-    Check: to_points({"ids": ["a#1"], "embeddings": [[0.1, 0.2]], "metadatas": [{"category": "x"}], "documents": ["hi"]})[0].payload
-           == {"category": "x", "text": "hi", "chroma_id": "a#1"}
-    """
-    raise NotImplementedError("TODO 1")
+    points: list[models.PointStruct] = []
+    for cid, emb, meta, doc in zip(ids, embeddings, metadatas, documents):
+        # Unpack meta into a fresh dict to prevent mutating the upstream ChromaDB dictionary
+        payload = {
+            **(meta or {}),
+            "text": doc,
+            "chroma_id": cid,
+        }
+        # Ensure vector is a native Python list of floats (Qdrant rejects raw NumPy arrays)
+        vector = emb.tolist() if hasattr(emb, "tolist") else [float(x) for x in emb]
+        
+        points.append(
+            models.PointStruct(
+                id=VS.point_id(cid),
+                vector=vector,
+                payload=payload,
+            )
+        )
+    return points
 
 
 def overlap_at_k(a: list, b: list, k: int = 3) -> float:
-    """TODO 2 - did the two databases return the same top k? (order doesn't matter)
-
-    Return (number of ids in BOTH a[:k] and b[:k]) / k, as a float. k = 0 -> 0.0
-    Check: overlap_at_k(["x", "y", "z"], ["z", "x", "q"], 3) == 2/3
-    """
-    raise NotImplementedError("TODO 2")
+    if k <= 0 or not a or not b:
+        return 0.0
+    
+    return float(len(set(a[:k]) & set(b[:k])) / k)
 
 
-def tenant_filter(customer_id: str):
-    """TODO 3 - the filter that keeps one customer's notes private.
+def tenant_filter(customer_id: str) -> models.Filter:
+    """TODO 3 - the filter that keeps one customer's notes private."""
+    return models.Filter(
+        must=[
+            models.FieldCondition(
+                key="customer_id",
+                match=models.MatchValue(value=customer_id),
+            )
+        ]
+    )
 
-    Return a models.Filter whose `must` list holds ONE models.FieldCondition: key "customer_id", match = models.MatchValue(value=customer_id)
-    (In a real app the customer_id comes from the login token - never from what the user typed.)
-    """
-    raise NotImplementedError("TODO 3")
 
-
-# TODO 4 - choose a vector store for each situation: one of "chroma", "qdrant", "pgvector", "pinecone", "weaviate",
-# and a one-sentence reason (at least 8 words) that names the deciding factor. There's more than one defensible answer.
 STORE_CHOICES: dict[str, tuple[str, str]] = {
-    # A hospital: patient notes must stay inside its own data centre; the IT team already runs PostgreSQL.
-    "hospital_onprem": ("", ""),
-    # A 2-person startup, no ops engineer, US customers, wants to pay only as it grows.
-    "startup_no_ops": ("", ""),
-    # 50 million product vectors, heavy filtering by brand and price, a team happy to run its own servers.
-    "ecommerce_scale": ("", ""),
+    "hospital_onprem": (
+        "pgvector",
+        "Strict HIPAA data residency requires on-premise hosting, and leveraging the IT team's existing PostgreSQL infrastructure eliminates introducing a separate database engine.",
+    ),
+    "startup_no_ops": (
+        "pinecone",
+        "A fully managed serverless architecture eliminates infrastructure maintenance for a two-person team while providing usage-based scaling for US traffic.",
+    ),
+    "ecommerce_scale": (
+        "qdrant",
+        "Self-hosted Qdrant handles tens of millions of vectors with high-performance payload indexing designed specifically for complex multi-attribute metadata filtering.",
+    ),
 }
-
 
 # ========================================================================================= PART 1 - GIVEN
 QUESTIONS = ["how long do refunds take", "my parcel arrived broken", "can I pay cash on delivery",
@@ -74,10 +90,10 @@ QUESTIONS = ["how long do refunds take", "my parcel arrived broken", "can I pay 
 
 
 def main() -> None:
-    emb = S24.Embedder("bge-small")
-    rows = S26.chroma_rows(emb)
-    client, where = S26.connect_qdrant("auto")
-    n = S26.migrate_to_qdrant(client, rows, to_points=to_points)
+    emb = EMBEDDING.Embedder("bge-small")
+    rows = VS.chroma_rows(emb)
+    client, where = VS.connect_qdrant("auto")
+    n = VS.migrate_to_qdrant(client, rows, to_points=to_points)
     print(f"migrated {n} points with YOUR to_points() -> {where}\n")
     report = ["# Session 26 - my migration results", "", f"Target: {where}", "",
               "## Same results? (YOUR overlap_at_k, top 3)", "", "| question | overlap |", "|---|---|"]
@@ -87,14 +103,14 @@ def main() -> None:
     for q in QUESTIONS:
         before = [h["id"] for h in search(chroma, emb, q, 3)]
         qv = emb.embed([q], kind="query")[0]
-        after = [p["chroma_id"] for _, p in S26.search_qdrant(client, qv, 3)]
+        after = [p["chroma_id"] for _, p in VS.search_qdrant(client, qv, 3)]
         ov = overlap_at_k(before, after, 3)
         print(f"  {ov:.2f}  {q}")
         report.append(f"| {q} | {ov:.2f} |")
 
-    S26.migrate_notes(client, emb)
+    VS.migrate_notes(client, emb)
     qv = emb.embed(["what did the customer ask about their refund"], kind="query")[0]
-    leaked = [p["customer_id"] for _, p in S26.search_qdrant(client, qv, 3, "customer_notes", tenant_filter("CUST-1001"))]
+    leaked = [p["customer_id"] for _, p in VS.search_qdrant(client, qv, 3, "customer_notes", VS.tenant_filter("CUST-1001"))]
     safe = all(c == "CUST-1001" for c in leaked)
     print(f"\ntenant filter for Asha returned customers {leaked} -> {'SAFE' if safe else 'LEAK'}")
     report += ["", "## Multi-tenancy (YOUR tenant_filter)", "", f"Asha's search returned: {leaked} -> {'SAFE' if safe else 'LEAK'}",

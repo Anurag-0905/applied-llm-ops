@@ -1,4 +1,3 @@
-"""Session 26 checker - imports YOUR <work repo>/s26/migrate.py and tests the four TODOs. Offline: no model, no Docker."""
 from __future__ import annotations
 
 import importlib.util
@@ -6,24 +5,24 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-STUDENT_PATH = Path("s26") / "migrate.py"
+STUDENT_PATH = Path("vectordbs") / "migrate.py"
 STORES = {"chroma", "qdrant", "pgvector", "pinecone", "weaviate"}
 SELF_HOSTABLE = {"chroma", "qdrant", "pgvector", "weaviate"}
 
 
 def load_module(path: Path):
     sys.path.insert(0, str(HERE))
-    spec = importlib.util.spec_from_file_location(f"s26_student_{abs(hash(path))}", path)
+    spec = importlib.util.spec_from_file_location(f"vs_repo{abs(hash(path))}", path)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
 
 
-def check_s26_work(path: Path) -> list[str]:
+def check_vs_work(path: Path) -> list[str]:
     """Returns a list of problems. Empty list = everything passes."""
     if not path.exists():
-        return [f"{path} not found - run:  uv run python module04/s26_setup.py"]
-    import s26_utils as S26
+        return [f"{path} not found - run:  uv run python vectordbs/vs_setup.py"]
+    import vs_utils as VS
     from qdrant_client import QdrantClient, models
     mod = load_module(path)
     problems: list[str] = []
@@ -33,15 +32,15 @@ def check_s26_work(path: Path) -> list[str]:
             "metadatas": [{"doc_id": "refunds", "category": "payments"}, {"doc_id": "warranty", "category": "returns"},
                           {"doc_id": "payments", "category": "payments"}],
             "documents": ["refund text", "warranty text", "payment text"]}
-    # TODO 1
+    
     try:
         pts = mod.to_points(rows)
         if len(pts) != 3:
             problems.append(f"TODO 1 to_points returned {len(pts)} points for 3 rows")
         else:
             p = pts[0]
-            if str(p.id) != S26.point_id("refunds#1"):
-                problems.append("TODO 1 point id must be S26.point_id(<chroma id>)")
+            if str(p.id) != VS.point_id("refunds#1"):
+                problems.append("TODO 1 point id must be VS.point_id(<chroma id>)")
             if list(p.vector) != [1.0, 0.0, 0.0, 0.0]:
                 problems.append("TODO 1 point vector must be the row's embedding")
             want = {"doc_id": "refunds", "category": "payments", "text": "refund text", "chroma_id": "refunds#1"}
@@ -58,7 +57,7 @@ def check_s26_work(path: Path) -> list[str]:
     except Exception as e:
         problems.append(f"TODO 1 to_points() crashed: {type(e).__name__}: {e}")
 
-    # TODO 2
+    
     try:
         for args, want in [((["x", "y", "z"], ["z", "x", "q"], 3), 2 / 3), ((["a", "b"], ["b", "a"], 2), 1.0),
                            ((["a", "b", "c"], ["d", "e", "f"], 3), 0.0), (([], [], 0), 0.0)]:
@@ -71,7 +70,7 @@ def check_s26_work(path: Path) -> list[str]:
     except Exception as e:
         problems.append(f"TODO 2 overlap_at_k() crashed: {type(e).__name__}: {e}")
 
-    # TODO 3 - test it for real against an in-memory Qdrant with two tenants
+    
     try:
         f = mod.tenant_filter("CUST-1001")
         if not isinstance(f, models.Filter):
@@ -89,7 +88,6 @@ def check_s26_work(path: Path) -> list[str]:
     except Exception as e:
         problems.append(f"TODO 3 tenant_filter() crashed: {type(e).__name__}: {e}")
 
-    # TODO 4
     choices = getattr(mod, "STORE_CHOICES", {})
     for key in ("hospital_onprem", "startup_no_ops", "ecommerce_scale"):
         store, reason = choices.get(key, ("", ""))

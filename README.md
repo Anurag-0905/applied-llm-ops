@@ -98,6 +98,16 @@ This repository contains my technical audits, benchmarks, and prototype deployme
 - **Business Impact:** I proved that legacy keyword (BM25) search fails entirely on synonymous queries (MRR: 0.50), rendering it unfit for intent routing. By transitioning to a 384-dimensional dense vector space (`bge-small-en-v1.5`) and executing cosine similarity sweeps, I achieved a perfect `hit@3` score (10/10) with an MRR of 0.95. I also quantified the necessity of strict cosine thresholds (e.g., 0.63) to block irrelevant out-of-scope retrievals from reaching the LLM, preventing downstream hallucinations.
 - **File:** `vectordbs/embeddings.ipynb` & `vectordbs/search.py`
 
+### 17. Vector Databases & ANN Indexing (ChromaDB)
+- **Objective:** I engineered a persistent, disk-backed vector database using ChromaDB to replace in-memory, brute-force semantic search[cite: 5].
+- **Business Impact:** I demonstrated that flat exact search degrades linearly (O(N)), making it unscalable for enterprise-level catalogues of 50 million+ vectors[cite: 5]. I implemented HNSW (Hierarchical Navigable Small World) approximate nearest neighbor indexes to achieve sub-linear latency[cite: 5]. I proved the critical necessity of hard metadata filtering at the database layer (not post-retrieval) to guarantee strict tenant isolation, and empirically evaluated the trade-off between computational latency and `recall@k` accuracy by tuning `ef_search` and `M` parameters[cite: 5].
+- **File:** `vectordbs/store.py` & `vectordbs/vector_db.ipynb`
+
+### 18. Production Vector Stores & Multi-Tenancy (Qdrant & pgvector)
+- **Objective:** I migrated the retrieval layer from an embedded library (ChromaDB) to production client-server databases (Qdrant and PostgreSQL with `pgvector`) to support multi-user concurrency, persistence, and horizontal scaling[cite: 5].
+- **Business Impact:** I executed a zero-re-embed migration and proved 100% retrieval parity (`overlap@k = 1.0`) across ChromaDB, Qdrant, and `pgvector`[cite: 5]. I audited cross-tenant data leakage in shared collections and enforced mandatory query-level payload filtering to isolate customer records[cite: 5]. I also modeled memory economics at scale, demonstrating that `int8` and `binary` quantization compress 100M-vector RAM footprints from 153.6 GB down to 38.4 GB and 4.8 GB, respectively[cite: 5].
+- **File:** `vectordbs/vector_stores.ipynb` & `vectordbs/migrate.py`
+
 ---
 
 ## ⚙️ Execution & Reproduction
