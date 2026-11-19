@@ -108,6 +108,11 @@ This repository contains my technical audits, benchmarks, and prototype deployme
 - **Business Impact:** I executed a zero-re-embed migration and proved 100% retrieval parity (`overlap@k = 1.0`) across ChromaDB, Qdrant, and `pgvector`[cite: 5]. I audited cross-tenant data leakage in shared collections and enforced mandatory query-level payload filtering to isolate customer records[cite: 5]. I also modeled memory economics at scale, demonstrating that `int8` and `binary` quantization compress 100M-vector RAM footprints from 153.6 GB down to 38.4 GB and 4.8 GB, respectively[cite: 5].
 - **File:** `vectordbs/vector_stores.ipynb` & `vectordbs/migrate.py`
 
+### 19. Hybrid Search, RRF Fusion & Cross-Encoder Reranking
+- **Objective:** I engineered a two-stage hybrid retrieval architecture combining sparse BM25 keyword search with dense vector embeddings, Reciprocal Rank Fusion (RRF), and cross-encoder reranking (`Xenova/ms-marco-MiniLM-L-6-v2`)[cite: 6].
+- **Business Impact:** I proved that single-method retrieval fails on real customer traffic—dense vectors missed exact product codes (`SKU-EL-004`, 7/9 exact), while BM25 failed on paraphrased queries (11/13 semantic)[cite: 6]. Implementing two-stage hybrid retrieval with cross-encoder reranking achieved 100% `hit@3` (22/22) and lifted MRR to 0.95[cite: 6]. I also calibrated a logit-based relevance gate to block out-of-scope queries before LLM generation and deployed server-side hybrid prefetching in Qdrant[cite: 6].
+- **File:** `vectordbs/hybrid_rerank.ipynb` & `vectordbs/hybrid.py`
+
 ---
 
 ## ⚙️ Execution & Reproduction
